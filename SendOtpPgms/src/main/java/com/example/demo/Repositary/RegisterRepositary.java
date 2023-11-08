@@ -6,4 +6,6 @@ import com.example.demo.Entity.Applicant;
 
 public interface RegisterRepositary extends JpaRepository<Applicant, Long>{
 	Applicant  findByEmail(String email);
+
+	boolean existsByEmail(String email);
 }

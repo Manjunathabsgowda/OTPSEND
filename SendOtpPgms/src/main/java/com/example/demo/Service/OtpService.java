@@ -20,6 +20,14 @@ public class OtpService {
     private String generateRandomOtp() {
         return RandomStringUtils.randomNumeric(6); // Generate a 6-digit OTP
     }
+    public boolean validateOtp(String userEmail, String enteredOtp) {
+        OtpData otpData = otpMap.get(userEmail);
+        if (otpData != null && otpData.isValid(enteredOtp)) {
+            otpMap.remove(userEmail);
+            return true;
+        }
+        return false;
+    }
     //
     private static class OtpData {
         private String otp;
@@ -29,7 +37,10 @@ public class OtpService {
             this.otp = otp;
             this.creationTime = System.currentTimeMillis();
         }
-
+        public boolean isValid(String enteredOtp) {
+            long currentTime = System.currentTimeMillis();
+            return currentTime - creationTime <= OTP_VALID_DURATION_MS && otp.equals(enteredOtp);
+        }
         public long getCreationTime() {
             return creationTime;
         }
